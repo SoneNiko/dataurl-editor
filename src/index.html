@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta charset="utf-8">
+<title>E</title>
+<style>
+    html {
+        font-family: monospace;
+        background: rgb(50, 53, 63);
+        color: rgb(189, 189, 189);
+        font-size: 1em;
+        height: 100vh;
+    }
+
+    * {
+        margin: 0;
+    }
+
+    li {
+        width: 100%;
+        border-top: 1px solid rgb(71, 71, 90);
+        border-left: 0;
+        border-right: 0;
+    }
+
+    li:last-child {
+        border-bottom: 1px solid rgb(71, 71, 90);
+    }
+
+    ol {
+        padding-top: 1em;
+    }
+
+    ol:focus {
+        outline: none;
+    }
+
+    #info {
+        margin-bottom: 1em;
+        position: absolute;
+        z-index: 1;
+        bottom: 0;
+        width: calc(100% - 6em);
+        padding-left: 2em;
+        padding-right: 2em;
+        border-radius: 30px;
+    }
+
+    .flex-util {
+        display: flex;
+        justify-content: space-between;
+        gap: 4em;
+        flex-direction: row;
+
+    }
+</style>
+<script>
+    window.onload = (() => {
+        let h = document.querySelector("html");
+        let b = document.querySelector("ol");
+        document.addEventListener('keydown', (event) => {
+            if (event.ctrlKey && event.key === 's') {
+                event.preventDefault();
+                let text = b.innerText.replace("\n\n", "\n");
+                let blob = new Blob([text], { type: 'text/plain' });
+                let a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = 'note.txt';
+                a.click();
+            }
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                let selection = window.getSelection();
+                let range = selection.getRangeAt(0);
+                let li = range.startContainer.closest('li');
+                if (li && li.innerText.trim() === '') {
+                    event.preventDefault();
+                    let newLi = document.createElement('li');
+                    newLi.innerHTML = '<br>';
+                    li.parentNode.insertBefore(newLi, li.nextSibling);
+                    let newRange = document.createRange();
+                    newRange.setStart(newLi, 0);
+                    newRange.collapse(true);
+                    selection.removeAllRanges();
+                    selection.addRange(newRange);
+                }
+            }
+        });
+        document.addEventListener('keydown', (event) => {
+            if (event.key === 'Backspace') {
+                let selection = window.getSelection();
+                let range = selection.getRangeAt(0);
+                let li = range.startContainer.closest('li');
+                if (li && li.previousElementSibling === null && li.innerText.trim() === '') {
+                    event.preventDefault();
+                }
+            }
+        });
+        document.addEventListener('click', (event) => {
+            if (event.target.tagName === 'HTML') {
+                let lastLi = b.querySelector('li:last-child');
+                let range = document.createRange();
+                let selection = window.getSelection();
+                range.setStart(lastLi, lastLi.childNodes.length);
+                range.collapse(true);
+                selection.removeAllRanges();
+                selection.addRange(range);
+            }
+        });
+        const wordCountSpan = document.getElementById('wordcount');
+        const charCountSpan = document.getElementById('charcount');
+        const selectionDetailsSpan = document.getElementById('selectiondetails');
+
+        function updateCounts() {
+            let text = b.innerText.trim();
+            let words = text.split(/\s+/).filter(word => word.length > 0);
+            wordCountSpan.textContent = words.length;
+            charCountSpan.textContent = text.length;
+        }
+
+        b.addEventListener('input', updateCounts);
+        document.addEventListener('selectionchange', () => {
+            let selection = window.getSelection();
+            selectionDetailsSpan.textContent = selection.toString().length;
+        });
+
+        updateCounts();
+    })
+</script>
+
+<body>
+    <ol contenteditable>
+        <li>Type Here</li>
+    </ol>
+
+    <div style="margin-left: 1em; margin-right: 1em;">
+
+        <div id="info" style="background-color: rgb(78, 86, 110);" class="flex-util">
+            <p>Ctrl + S to save</p>
+
+            <div class="flex-util">
+                <p>Words: <span id="wordcount">###</span></p>
+                <p>Characters: <span id="charcount">###</span></p>
+                <p>Selection: <span id="selectiondetails">###</span></p>
+            </div>
+        </div>
+    </div>
+</body>

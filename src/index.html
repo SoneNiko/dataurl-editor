@@ -73,7 +73,8 @@
             if (event.key === 'Enter') {
                 let selection = window.getSelection();
                 let range = selection.getRangeAt(0);
-                let li = range.startContainer.closest('li');
+                // range.startContainer can be a Text Node in some situations, so we need to look at the parent
+                let li = range.startContainer.nodeName === "#text" ? range.startContainer.parentElement.closest('li') : range.startContainer.closest('li');
                 if (li && li.innerText.trim() === '') {
                     event.preventDefault();
                     let newLi = document.createElement('li');
@@ -91,7 +92,8 @@
             if (event.key === 'Backspace') {
                 let selection = window.getSelection();
                 let range = selection.getRangeAt(0);
-                let li = range.startContainer.closest('li');
+                // range.startContainer can be a Text Node in some situations, so we need to look at the parent
+                let li = range.startContainer.nodeName === "#text" ? range.startContainer.parentElement.closest('li') : range.startContainer.closest('li');
                 if (li && li.previousElementSibling === null && li.innerText.trim() === '') {
                     event.preventDefault();
                 }

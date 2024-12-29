@@ -41,6 +41,8 @@
 
     ol {
         padding-top: 1em;
+        max-height: calc(100vh - 4em);
+        overflow-y: scroll;
     }
 
     ol:focus {
@@ -49,7 +51,7 @@
 
     #info {
         margin-bottom: 1em;
-        position: absolute;
+        position: fixed;
         z-index: 1;
         bottom: 0;
         width: calc(100% - 6em);
@@ -71,17 +73,29 @@
         let h = document.querySelector("html");
         let b = document.querySelector("ol");
         document.addEventListener('keydown', (event) => {
+            if (event.ctrlKey && event.key === 'v') {
+                // remove duplicate br tags after pasting
+                setTimeout(() => {
+                    let brs = b.querySelectorAll('br');
+                    brs.forEach((br) => {
+                        if (br.nextElementSibling && br.nextElementSibling.nodeName === 'BR') {
+                            br.nextElementSibling.remove();
+                        }
+                    });
+                }, 50);
+            }
             if (event.ctrlKey && event.key === 's') {
                 event.preventDefault();
-                let text = b.innerText.replace("\n\n", "\n");
-                let blob = new Blob([text], { type: 'text/plain' });
+                let oldContent = b.innerHTML;
+                b.innerHTML = b.innerHTML.replaceAll('<br>', '\u0378'); // we meed to replace these otherwise they get converted to line breaks. I used a character from the unassigned unicode block
+                let text = b.innerText;
+                let blob = new Blob([text.replaceAll('\u0378', '')], { type: 'text/plain' });
                 let a = document.createElement('a');
                 a.href = URL.createObjectURL(blob);
                 a.download = 'note.txt';
                 a.click();
+                b.innerHTML = oldContent;
             }
-        });
-        document.addEventListener('keydown', (event) => {
             if (event.key === 'Enter') {
                 let selection = window.getSelection();
                 let range = selection.getRangeAt(0);
@@ -90,7 +104,7 @@
                 if (li && li.innerText.trim() === '') {
                     event.preventDefault();
                     let newLi = document.createElement('li');
-                    newLi.innerHTML = '<br>';
+                    newLi.innerHTML = '<br>'; // This new line charcter is needed to make the li elements focussable by cursor navigation
                     li.parentNode.insertBefore(newLi, li.nextSibling);
                     let newRange = document.createRange();
                     newRange.setStart(newLi, 0);
@@ -98,15 +112,14 @@
                     selection.removeAllRanges();
                     selection.addRange(newRange);
                 }
+
             }
-        });
-        document.addEventListener('keydown', (event) => {
             if (event.key === 'Backspace') {
                 let selection = window.getSelection();
                 let range = selection.getRangeAt(0);
                 // range.startContainer can be a Text Node in some situations, so we need to look at the parent
                 let li = range.startContainer.nodeName === "#text" ? range.startContainer.parentElement.closest('li') : range.startContainer.closest('li');
-                if (li && li.previousElementSibling === null && li.innerText.trim() === '') {
+                if (li && li.previousElementSibling === null && li.innerText.trim() === '' && !li.innerText.endsWith(' ')) {
                     event.preventDefault();
                 }
             }

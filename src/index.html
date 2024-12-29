@@ -166,19 +166,6 @@
             }
         });
 
-        function updateCounts() {
-            let text = b.innerText.trim();
-            let words = text.split(/\s+/).filter(word => word.length > 0);
-            wordCountSpan.textContent = words.length;
-            charCountSpan.textContent = text.length;
-        }
-
-        b.addEventListener('input', updateCounts);
-        document.addEventListener('selectionchange', () => {
-            let selection = window.getSelection();
-            selectionDetailsSpan.textContent = selection.toString().length;
-        });
-
         function responsiveDesign() {
             let width = window.innerWidth;
             if (width <= 620 && !isPhone) {

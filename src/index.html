@@ -128,6 +128,8 @@
             }
             if (event.key === 'Enter') {
                 let selection = window.getSelection();
+                // Do nothing if there is no selection
+                if (selection.rangeCount === 0) return;
                 let range = selection.getRangeAt(0);
                 // range.startContainer can be a Text Node in some situations, so we need to look at the parent
                 let li = range.startContainer.nodeName === "#text" ? range.startContainer.parentElement.closest('li') : range.startContainer.closest('li');
@@ -146,6 +148,8 @@
             }
             if (event.key === 'Backspace') {
                 let selection = window.getSelection();
+                // Do nothing if there is no selection
+                if (selection.rangeCount === 0) return;
                 let range = selection.getRangeAt(0);
                 // range.startContainer can be a Text Node in some situations, so we need to look at the parent
                 let li = range.startContainer.nodeName === "#text" ? range.startContainer.parentElement.closest('li') : range.startContainer.closest('li');

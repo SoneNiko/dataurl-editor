@@ -6,7 +6,7 @@
 <style>
     @font-face {
         font-family: 's';
-        src: url("s.woff2") format('woff2');
+        src: url('s.woff2') format('woff2');
         unicode-range: U+0020;
         /* Specify only the space character */
     }
@@ -29,6 +29,9 @@
         border-left: 0;
         border-right: 0;
         font-family: 's', monospace;
+        line-height: 1;
+        margin-bottom: 2px;
+        white-space: pre-wrap;
     }
 
     li::marker {
@@ -42,7 +45,7 @@
     ol {
         padding-top: 1em;
         max-height: calc(100vh - 4em);
-        overflow-y: scroll;
+        overflow-y: auto;
         overflow-x: hidden;
         word-break: break-all;
     }

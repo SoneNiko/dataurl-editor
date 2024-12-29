@@ -81,7 +81,28 @@
 
         let isPhone = false;
 
+        const wordCountSpan = document.getElementById('wordcount');
+        const charCountSpan = document.getElementById('charcount');
+        const selectionDetailsSpan = document.getElementById('selectiondetails');
+
+        function updateCounts() {
+            let text = b.innerText.trim();
+            let textNoTrim = b.innerText;
+            let words = text.split(/\s+/).filter(word => word.length > 0);
+            wordCountSpan.textContent = words.length;
+            charCountSpan.textContent = textNoTrim.length;
+        }
+
+        b.addEventListener('input', updateCounts);
+        document.addEventListener('selectionchange', () => {
+            let selection = window.getSelection();
+            selectionDetailsSpan.textContent = selection.toString().length;
+        });
+
+        updateCounts();
+
         document.addEventListener('keydown', (event) => {
+            updateCounts();
             if (event.ctrlKey && event.key === 'v') {
                 // remove duplicate br tags after pasting
                 setTimeout(() => {
@@ -144,9 +165,6 @@
                 selection.addRange(range);
             }
         });
-        const wordCountSpan = document.getElementById('wordcount');
-        const charCountSpan = document.getElementById('charcount');
-        const selectionDetailsSpan = document.getElementById('selectiondetails');
 
         function updateCounts() {
             let text = b.innerText.trim();

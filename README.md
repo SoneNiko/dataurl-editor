@@ -24,6 +24,8 @@ It was difficult to render spaces as dots due to the fact that there is no css s
 
 I used the [html-minifier](https://www.npmjs.com/package/html-minifier) package from npmjs to minimize the bundled html file.
 
+Saving the text is problematic because the `innerText` property of the ol element interprets both `<br>` tags and new `li` tags as line breaks. to get around this i replaced `br` tags in the `innerHtml` property with some unicode reserved character which I then later replace with nothing. I revert the `innerText` property to the original state after saving the file. The file is saved as a text file with the extension `.txt`.
+
 There were some concerns about the maximum size of a data url in the firefox address but according to sources on google, the limit is 65535 characters.
 
 ## Known issues

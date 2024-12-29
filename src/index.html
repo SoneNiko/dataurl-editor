@@ -4,6 +4,13 @@
 <meta charset="utf-8">
 <title>E</title>
 <style>
+    @font-face {
+        font-family: 's';
+        src: url("s.woff2") format('woff2');
+        unicode-range: U+0020;
+        /* Specify only the space character */
+    }
+
     html {
         font-family: monospace;
         background: rgb(50, 53, 63);
@@ -21,6 +28,11 @@
         border-top: 1px solid rgb(71, 71, 90);
         border-left: 0;
         border-right: 0;
+        font-family: 's', monospace;
+    }
+
+    li::marker {
+        font-family: monospace;
     }
 
     li:last-child {

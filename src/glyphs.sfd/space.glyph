@@ -1,0 +1,18 @@
+StartChar: space
+Encoding: 32 32 0
+Width: 601
+Flags: HW
+HStem: 306 188<242.172 361.828>
+VStem: 208 188<340.172 459.828>
+AnchorPoint: "middle" 302 400 basechar 0
+LayerCount: 2
+Fore
+SplineSet
+208 400 m 0
+ 208 452 250 494 302 494 c 0
+ 354 494 396 452 396 400 c 0
+ 396 348 354 306 302 306 c 0
+ 250 306 208 348 208 400 c 0
+0 2 m 1049
+EndSplineSet
+EndChar

@@ -77,6 +77,10 @@
     window.onload = (() => {
         let h = document.querySelector("html");
         let b = document.querySelector("ol");
+        let info = document.querySelector("#info");
+
+        let isPhone = false;
+
         document.addEventListener('keydown', (event) => {
             if (event.ctrlKey && event.key === 'v') {
                 // remove duplicate br tags after pasting
@@ -157,7 +161,22 @@
             selectionDetailsSpan.textContent = selection.toString().length;
         });
 
+        function responsiveDesign() {
+            let width = window.innerWidth;
+            if (width <= 620 && !isPhone) {
+              info.children[0].style.display = "none";
+              info.style.justifyContent = "center";
+              isPhone = true;
+          } else if (width > 620 && isPhone) {
+              info.children[0].style.display = "";
+              info.style.justifyContent = "";
+              isPhone = false;
+          }
+        }
+        window.addEventListener('resize', responsiveDesign);
+
         updateCounts();
+        responsiveDesign();
     })
 </script>
 
